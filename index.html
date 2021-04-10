@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/filter.css">
+<link rel="stylesheet" href="css/nouislider.min.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/tailDT.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/wNumb.js"></script>
+        <script src="data/romangardenspublished_1.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:20, minZoom:1
+        }).fitBounds([[26.78069485964819,-11.628747148109609],[53.43294809956919,37.89762003939041]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_GoogleSatellite_0');
+        map.getPane('pane_GoogleSatellite_0').style.zIndex = 400;
+        var layer_GoogleSatellite_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleSatellite_0',
+            opacity: 1.0,
+            attribution: '<a href="https://www.google.at/permissions/geoguidelines/attr-guide.html">Map data ©2015 Google</a>',
+            minZoom: 1,
+            maxZoom: 20,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_GoogleSatellite_0;
+        map.addLayer(layer_GoogleSatellite_0);
+        function pop_romangardenspublished_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2" style="font-size:150%; font-weight:bold">' + (feature.properties['title'] !== null ? autolinker.link(feature.properties['title'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row"></th>\
+            <td><a href="' + feature.properties['url'] + '">View article</a></td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_romangardenspublished_1_0() {
+            return {
+                pane: 'pane_romangardenspublished_1',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,255,0,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_romangardenspublished_1');
+        map.getPane('pane_romangardenspublished_1').style.zIndex = 401;
+        map.getPane('pane_romangardenspublished_1').style['mix-blend-mode'] = 'normal';
+        var layer_romangardenspublished_1 = new L.geoJson(json_romangardenspublished_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_romangardenspublished_1',
+            layerName: 'layer_romangardenspublished_1',
+            pane: 'pane_romangardenspublished_1',
+            onEachFeature: pop_romangardenspublished_1,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_romangardenspublished_1_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_romangardenspublished_1);
+        map.addLayer(layer_romangardenspublished_1);
+        setBounds();
+        var mapDiv = document.getElementById('map');
+        var row = document.createElement('div');
+        row.className="row";
+        row.id="all";
+        row.style.height = "100%";
+        var col1 = document.createElement('div');
+        col1.className="col9";
+        col1.id = "mapWindow";
+        col1.style.height = "99%";
+        col1.style.width = "80%";
+        col1.style.display = "inline-block";
+        var col2 = document.createElement('div');
+        col2.className="col3";
+        col2.id = "menu";
+        col2.style.display = "inline-block";
+        mapDiv.parentNode.insertBefore(row, mapDiv);
+        document.getElementById("all").appendChild(col1);
+        document.getElementById("all").appendChild(col2);
+        col1.appendChild(mapDiv)
+        var Filters = {"title": "str"};
+        function filterFunc() {
+          map.eachLayer(function(lyr){
+          if ("options" in lyr && "dataVar" in lyr["options"]){
+            features = this[lyr["options"]["dataVar"]].features.slice(0);
+            try{
+              for (key in Filters){
+                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
+                if (Filters[key] == "str" || Filters[key] == "bool"){
+                  var selection = [];
+                  var options = document.getElementById("sel_" + keyS).options
+                  for (var i=0; i < options.length; i++) {
+                    if (options[i].selected) selection.push(options[i].value);
+                  }
+                    try{
+                      if (key in features[0].properties){
+                        for (i = features.length - 1;
+                          i >= 0; --i){
+                          if (selection.indexOf(
+                          features[i].properties[key])<0
+                          && selection.length>0) {
+                          features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                  }
+                }
+                if (Filters[key] == "int"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (parseInt(features[i].properties[key])
+                          < sliderVals[0]
+                          || parseInt(features[i].properties[key])
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "real"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (features[i].properties[key]
+                          < sliderVals[0]
+                          || features[i].properties[key]
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }u
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "date"
+                  || Filters[key] == "datetime"
+                  || Filters[key] == "time"){
+                  try{
+                    if (key in features[0].properties){
+                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+                      startdate = document.getElementById("dat_" +
+                        HTMLkey + "_date1").value.replace(" ", "T");
+                      enddate = document.getElementById("dat_" +
+                        HTMLkey + "_date2").value.replace(" ", "T");
+                      for (i = features.length - 1; i >= 0; --i){
+                        if (features[i].properties[key] < startdate
+                          || features[i].properties[key] > enddate){
+                          features.splice(i,1);
+                        }
+                      }
+                    }
+                  } catch(err){
+                  }
+                }
+              }
+            } catch(err){
+            }
+          this[lyr["options"]["layerName"]].clearLayers();
+          this[lyr["options"]["layerName"]].addData(features);
+          }
+          })
+        }
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_title = document.createElement('div');
+            div_title.id = "div_title";
+            div_title.className= "filterselect";
+            document.getElementById("menu").appendChild(div_title);
+            sel_title = document.createElement('select');
+            sel_title.multiple = true;
+            sel_title.size = 40;
+            sel_title.id = "sel_title";
+            var title_options_str = "";
+            sel_title.onchange = function(){filterFunc()};
+            title_options_str  += '<option value="Agora of the Italians">Agora of the Italians</option>';
+            title_options_str  += '<option value="Altar of the Twelve Gods">Altar of the Twelve Gods</option>';
+            title_options_str  += '<option value="Balsam Groves">Balsam Groves</option>';
+            title_options_str  += '<option value="Britannia">Britannia</option>';
+            title_options_str  += '<option value="Casa della Gemma (Insula or. I.1)">Casa della Gemma (Insula or. I.1)</option>';
+            title_options_str  += '<option value="Domus of the Sea Front (Villa du front de mer)">Domus of the Sea Front (Villa du front de mer)</option>';
+            title_options_str  += '<option value="Garden Houses (Case a Giardino)">Garden Houses (Case a Giardino)</option>';
+            title_options_str  += '<option value="Garden of Epicurus">Garden of Epicurus</option>';
+            title_options_str  += '<option value="Guest House 1">Guest House 1</option>';
+            title_options_str  += '<option value="Gymnasia and Groves">Gymnasia and Groves</option>';
+            title_options_str  += '<option value="Hermaphrodite House (Maison de l&apos;Hermaphrodite)">Hermaphrodite House (Maison de l&apos;Hermaphrodite)</option>';
+            title_options_str  += '<option value="Herodian First Palace">Herodian First Palace</option>';
+            title_options_str  += '<option value="Herod’s Tomb Garden">Herod’s Tomb Garden</option>';
+            title_options_str  += '<option value="House H (Maison H)">House H (Maison H)</option>';
+            title_options_str  += '<option value="House of Africa (Maison de l&apos;Afrique)">House of Africa (Maison de l&apos;Afrique)</option>';
+            title_options_str  += '<option value="House of Dionysos">House of Dionysos</option>';
+            title_options_str  += '<option value="House of Fourni">House of Fourni</option>';
+            title_options_str  += '<option value="House of Venus (Maison de Venus)">House of Venus (Maison de Venus)</option>';
+            title_options_str  += '<option value="House of the Black and White Triclinium (Maison du triclinium en noir et blanc)">House of the Black and White Triclinium (Maison du triclinium en noir et blanc)</option>';
+            title_options_str  += '<option value="House of the Nymphs (Maison des Nymphes)">House of the Nymphs (Maison des Nymphes)</option>';
+            title_options_str  += '<option value="House of the Seasons (La maison des Saisons)">House of the Seasons (La maison des Saisons)</option>';
+            title_options_str  += '<option value="House of two peristyles (Maison aux deux péristyles)">House of two peristyles (Maison aux deux péristyles)</option>';
+            title_options_str  += '<option value="I.2.15">I.2.15</option>';
+            title_options_str  += '<option value="Library of Hadrian">Library of Hadrian</option>';
+            title_options_str  += '<option value="Maritima Byzantine Law Court and Roof Garden">Maritima Byzantine Law Court and Roof Garden</option>';
+            title_options_str  += '<option value="Masada">Masada</option>';
+            title_options_str  += '<option value="Narrow garden in the house of Messius Ampliatus (II.ii.4)">Narrow garden in the house of Messius Ampliatus (II.ii.4)</option>';
+            title_options_str  += '<option value="Neoplatonic School Near the Areopagus">Neoplatonic School Near the Areopagus</option>';
+            title_options_str  += '<option value="Petra Garden and Pool Complex">Petra Garden and Pool Complex</option>';
+            title_options_str  += '<option value="Piazzale della Corporazioni">Piazzale della Corporazioni</option>';
+            title_options_str  += '<option value="Ramat Hanadiv">Ramat Hanadiv</option>';
+            title_options_str  += '<option value="Roman Palace in Fishbourne">Roman Palace in Fishbourne</option>';
+            title_options_str  += '<option value="Rural Estate in Gatcombe">Rural Estate in Gatcombe</option>';
+            title_options_str  += '<option value="Rural Villa in Chedworth">Rural Villa in Chedworth</option>';
+            title_options_str  += '<option value="Rural Villa in Darenth">Rural Villa in Darenth</option>';
+            title_options_str  += '<option value="Rural Villa in Eccles">Rural Villa in Eccles</option>';
+            title_options_str  += '<option value="Rural Villa in Frocester Court">Rural Villa in Frocester Court</option>';
+            title_options_str  += '<option value="Rural Villa in Gorhambury">Rural Villa in Gorhambury</option>';
+            title_options_str  += '<option value="Rural Villa in Latimer">Rural Villa in Latimer</option>';
+            title_options_str  += '<option value="Rural Villa in Sudeley/Spoonley Wood">Rural Villa in Sudeley/Spoonley Wood</option>';
+            title_options_str  += '<option value="Sanctuary of Apollo and the Nymphs">Sanctuary of Apollo and the Nymphs</option>';
+            title_options_str  += '<option value="Sanctuary of Artemis">Sanctuary of Artemis</option>';
+            title_options_str  += '<option value="Sanctuary of Demeter and Persephone">Sanctuary of Demeter and Persephone</option>';
+            title_options_str  += '<option value="Sanctuary of Ganymede or Hebe">Sanctuary of Ganymede or Hebe</option>';
+            title_options_str  += '<option value="Sanctuary of Hyernetho">Sanctuary of Hyernetho</option>';
+            title_options_str  += '<option value="Sanctuary of Poseidon">Sanctuary of Poseidon</option>';
+            title_options_str  += '<option value="Sanctuary of Poseidon Onchestios">Sanctuary of Poseidon Onchestios</option>';
+            title_options_str  += '<option value="Sanctuary of Zeus">Sanctuary of Zeus</option>';
+            title_options_str  += '<option value="Sanctuary of Zeus Philios">Sanctuary of Zeus Philios</option>';
+            title_options_str  += '<option value="Shrine Complex in Insula E125">Shrine Complex in Insula E125</option>';
+            title_options_str  += '<option value="Suburban Gardens in Camulodunum">Suburban Gardens in Camulodunum</option>';
+            title_options_str  += '<option value="Temple Grove">Temple Grove</option>';
+            title_options_str  += '<option value="Temple Grove of Apollo">Temple Grove of Apollo</option>';
+            title_options_str  += '<option value="Temple of Hephaistos">Temple of Hephaistos</option>';
+            title_options_str  += '<option value="Terrace House 2">Terrace House 2</option>';
+            title_options_str  += '<option value="Tomb Garden and Cistern of Gallatis, Son of Pythion">Tomb Garden and Cistern of Gallatis, Son of Pythion</option>';
+            title_options_str  += '<option value="Tomb Garden of Anonymous">Tomb Garden of Anonymous</option>';
+            title_options_str  += '<option value="Tomb Garden of Bassos son of Euarestos">Tomb Garden of Bassos son of Euarestos</option>';
+            title_options_str  += '<option value="Tomb Garden of Papias son of Adrastos">Tomb Garden of Papias son of Adrastos</option>';
+            title_options_str  += '<option value="Tomb Painting in Chester">Tomb Painting in Chester</option>';
+            title_options_str  += '<option value="Victory Monument of Augustus">Victory Monument of Augustus</option>';
+            title_options_str  += '<option value="Villa of Herodes Atticus">Villa of Herodes Atticus</option>';
+            title_options_str  += '<option value="ʻIraq al-Amir">ʻIraq al-Amir</option>';
+            sel_title.innerHTML = title_options_str;
+            div_title.appendChild(sel_title);
+            var lab_title = document.createElement('div');
+            lab_title.innerHTML = '';
+            lab_title.className = 'filterlabel';
+            div_title.appendChild(lab_title);
+            var reset_title = document.createElement('div');
+            reset_title.innerHTML = 'Show all gardens';
+            reset_title.className = 'filterlabel';
+            reset_title.onclick = function() {
+                var options = document.getElementById("sel_title").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_title.appendChild(reset_title);
+        </script>
+    </body>
+</html>
